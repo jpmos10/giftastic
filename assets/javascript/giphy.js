@@ -1,15 +1,17 @@
 $('document').ready(function() {
    
 
-    //GLOBAL VARIABLES
+    //variables
+
     var buttonHTML = '';
-    var buttonArray = ["Stargate SG-1", "The 100", "Helix", "Vikings", "Arrow", "Sleepy Hollow", "Seinfeld", "The Goldbergs", "Agents of Shield", "Gotham", "Star Trek"];
+    var buttonArray = ["Stargate+SG-1", "The+100", "Helix", "Vikings", "Arrow", "Sleepy+Hollow", "Seinfeld", "The+Goldbergs", "Agents+of+Shield", "Gotham", "Star+Trek"];
     var newtvShow;
     var gifArray = [];
+    
 
 
     //initial buttons
-    function createButtons() {
+    function renderButtons() {
         for (var i = 0; i < buttonArray.length; i++) {
             buttonHTML += "<button class='btn btn-lrg btn-success tvshowButtons' tvShow=" + buttonArray[i] + ">" + buttonArray[i] + "</button>";
         }
@@ -17,7 +19,7 @@ $('document').ready(function() {
     }
 
     //invoke function
-    createButtons();
+    renderButtons();
 
     //on click of submit button
     $('body').on('click', '#submitUserData', function(event) {
@@ -32,8 +34,13 @@ $('document').ready(function() {
         $('.GIFdiv').empty(); //clear div of old GIFs.
         var userTvshow = $(this).attr('tvShow');
         //limit 10.
-        queryURL = "https://api.giphy.com/v1/gifs/search?q=" + userTvshow + "&limit=10" + "&api_key=dc6zaTOxFJmzC"; //The API Key.
-        $.ajax({ url: queryURL, method: 'GET' })
+        queryURL = "https://api.giphy.com/v1/gifs/search?q=" + userTvshow + "&api_key=dc6zaTOxFJmzC&limit10"; 
+        $.ajax({ 
+
+            url: queryURL,
+
+            method: 'GET' })
+
             .done(function(response)  {
                 for (var i = 0; i < response.data.length; i++) {
                     $('.GIFdiv').append("<div class='GIFbox'><p class='title'>Rating: " + response.data[i].rating.toUpperCase() +
@@ -49,18 +56,16 @@ $('document').ready(function() {
     }); 
 
     //animate gifs
-    $('body').on('click', '.tvIMG', function() {
+    $('body').on('click', function() {
         var state = $(this).attr('data-state');
-        var GIFnotMoving = $(this).attr('data-still');
-        var GIFmoving = $(this).attr('data-animate');
-        if (state === 'still') {
-            $(this).attr('src', GIFmoving);
-            $(this).attr('data-state', 'animate');
-        } 
-        else if (state !== "still") {
-            $(this).attr('src', GIFnotMoving);
-            $(this).attr('data-state', 'still');
-        };
+        
+        if ( state == 'still'){
+                $(this).attr('src', $(this).data('animate'));
+                $(this).attr('data-state', 'animate');
+            }else{
+                $(this).attr('src', $(this).data('still'));
+                $(this).attr('data-state', 'still');
+            }
     }); // 
 
 }); 
